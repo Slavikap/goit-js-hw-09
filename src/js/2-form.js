@@ -1,8 +1,8 @@
 const form = document.querySelector('.feedback-form');
-const email = form.elements.email;
-email.classList.add('feedback-input');
-const message = form.elements.message;
-message.classList.add('feedback-input');
+const emailInput = form.elements.email;
+emailInput.classList.add('feedback-input');
+const messageInput = form.elements.message;
+messageInput.classList.add('feedback-input');
 
 form.addEventListener('submit', onSubmit);
 form.addEventListener('input', onInput);
@@ -12,46 +12,50 @@ const LS_KEY = 'feedback-form-state';
 function onSubmit(event) {
   event.preventDefault();
 
-  const email = form.elements.email.value;
-  const message = form.elements.message.value;
+  const emailValue = emailInput.value;
+  const messageValue = messageInput.value;
   const data = {
-    email,
-    message,
+    email: emailValue,
+    message: messageValue,
   };
 
   console.log(data);
-  localStorage.removeItem(LS_KEY, data);
+  addToLS(LS_KEY, data);
   form.reset();
 }
 
 function onInput() {
-  const email = form.elements.email.value;
-  const message = form.elements.message.value;
+  const emailValue = emailInput.value;
+  const messageValue = messageInput.value;
   const data = {
-    email,
-    message,
+    email: emailValue,
+    message: messageValue,
   };
   addToLS(LS_KEY, data);
 }
 
 function addToLS(key, value) {
-  const zip = JSON.stringify(value);
-  localStorage.setItem(key, zip);
+  const serializedValue = JSON.stringify(value);
+  localStorage.setItem(key, serializedValue);
 }
 
 function loadFromLS(key) {
-  const zip = localStorage.getItem(key);
+  const serializedValue = localStorage.getItem(key);
   try {
-    return JSON.parse(zip);
+    return JSON.parse(serializedValue);
   } catch {
-    return zip;
+    return serializedValue;
   }
 }
 
 function checkout() {
   const userData = loadFromLS(LS_KEY) || {};
-  form.elements.email.value = userData.email || '';
-  form.elements.message.value = userData.message || '';
+  if (userData.email !== undefined && userData.email !== null) {
+    form.elements.email.value = userData.email;
+  }
+  if (userData.message !== undefined && userData.message !== null) {
+    form.elements.message.value = userData.message;
+  }
 }
 
 checkout();
