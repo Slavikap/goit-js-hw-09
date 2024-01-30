@@ -12,8 +12,14 @@ const LS_KEY = 'feedback-form-state';
 function onSubmit(event) {
   event.preventDefault();
 
-  const emailValue = emailInput.value;
-  const messageValue = messageInput.value;
+  const emailValue = emailInput.value.trim();
+  const messageValue = messageInput.value.trim(); 
+
+  if (emailValue === '' || messageValue === '') {
+    alert('Поля форми пусті.');
+    return;
+  }
+
   const data = {
     email: emailValue,
     message: messageValue,
@@ -25,8 +31,8 @@ function onSubmit(event) {
 }
 
 function onInput() {
-  const emailValue = emailInput.value;
-  const messageValue = messageInput.value;
+  const emailValue = emailInput.value.trim(); 
+  const messageValue = messageInput.value.trim(); 
   const data = {
     email: emailValue,
     message: messageValue,
